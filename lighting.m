@@ -1,13 +1,17 @@
 clear;
-clc
+clc;
 close all;
 
-% img = imread('sphere2.bmp');
-% img = rgb2gray(img);
+% Using image demos in MATLAB folder
+img = imread('toysnoflash.png');
 
-img = imread('datasets/4/4_l1c2.png');
-% img = imread('datasets/32/32_l5c1.png');
-img = cropImg(img);
+% convert image to grayscale if image is in RGB color channel
+if (size(img, 3) == 3)
+    img = rgb2gray(img);
+end
+
+img = imcrop(img);
+[height, width] = size(img);
 
 newImg = imgPadding(img);
 [resVectorDirection, magnitudeNormal, actualNormal] = estSurfNorm(newImg);
