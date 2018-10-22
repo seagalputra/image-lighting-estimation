@@ -8,8 +8,8 @@ function [resVectorDirection, magnitudeNormal, actualNormal] = estSurfNorm(newIm
 resVectorDirection = [];
 magnitudeNormal = [];
 actualNormal = [];
-for i = 2:size(newImg, 1) - 2
-    for j = 2:size(newImg, 2) - 2
+for i = 2:size(newImg, 1) - 1
+    for j = 2:size(newImg, 2) - 1
         
         % Obtain value from 8-neighborhood matrix
         imgNeighborhood(1) = newImg(i-1,j-1);
