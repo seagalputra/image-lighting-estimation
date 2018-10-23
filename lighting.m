@@ -31,7 +31,6 @@ newImg = imgPadding(img);
 
 %% Divide image into k small planes every plane contains 9x9 pixels
 
-plane = floor(height * width/81);
 sz = size(img);
 chunkSize = [9 9];
 sc = sz ./ chunkSize;
