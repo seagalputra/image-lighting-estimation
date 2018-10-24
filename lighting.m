@@ -49,7 +49,16 @@ blockM = blkdiag(M{:});
 
 % create vector b
 b = reshape(b,[],1);
+b = double(b);
+b = transpose(b);
+% computer error function
+v = inv(blockM' * blockM) * blockM' .* b;
 
+error = norm((blockM*v) - b,2);
+
+% while error > 0
+%     error = norm((blockM*v) - b,2);
+% end
 %% Estimate lighting parameter using error function
 
 % split array of vector direction into cell
