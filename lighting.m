@@ -55,14 +55,3 @@ b = transpose(b);
 v = inv(blockM' * blockM) * blockM' .* b;
 
 error = norm((blockM*v) - b,2);
-
-% while error > 0
-%     error = norm((blockM*v) - b,2);
-% end
-%% Estimate lighting parameter using error function
-
-% split array of vector direction into cell
-% vectorSz = size(resVectorDirection);
-% vectorChunkSize = sz;
-% vectorSc = vectorSz ./ vectorChunkSize;
-% vecDirection = mat2cell(resVectorDirection, vectorChunkSize(1) * ones(vectorSc(1), 1), 2);
