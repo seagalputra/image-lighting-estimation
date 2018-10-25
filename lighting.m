@@ -19,10 +19,7 @@ img = aspectRatio(img, 9);
 
 %% Divide image into k small planes every plane contains 9x9 pixels 
 
-sz = size(img);
-chunkSize = [9 9];
-sc = sz ./ chunkSize;
-imgSplit = mat2cell(img, chunkSize(1) * ones(sc(1),1), chunkSize(2) * ones(sc(2),1));
+imgSplit = splitImage(img, 9);
 
 %% Compute surface normal
 
