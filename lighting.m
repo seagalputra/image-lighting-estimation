@@ -33,7 +33,8 @@ for i = 1:size(imgSplit, 1)
         % Define vector b
         b = [b reshape(imgSplit{i,j}',[],1)];
         % Construct M matrix
-        M{end+1} = [resVectorDirection ones(81, 1)];
+        % M{end+1} = [resVectorDirection ones(81, 1)];
+        M{end+1} = [resVectorDirection];
     end
 end
 
@@ -41,6 +42,7 @@ end
 
 % create block matrix of M
 blockM = blkdiag(M{:});
+blockM = [blockM ones(size(blockM,1),1)];
 
 % create vector b
 b = reshape(b,[],1);
