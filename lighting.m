@@ -15,9 +15,7 @@ end
 img = imcrop(img);
 
 % maintain image in 1:1 size ratio
-sizeImg = size(img);
-overPixel = mod(sizeImg, 9);
-img = img(1:sizeImg(1)-overPixel(1),1:sizeImg(2)-overPixel(2));
+img = aspectRatio(img, 9);
 
 %% Divide image into k small planes every plane contains 9x9 pixels 
 
