@@ -52,3 +52,12 @@ b = double(b);
 v = inv(blockM' * blockM) * blockM' * b;
 
 error = norm((blockM*v) - b,2);
+
+%% Create block matrix of C
+matDiag1 = [-1 0; 0 -1];
+matDiag2 = [1 0; 0 1];
+newMatDiag = cat(2, matDiag1, matDiag2);
+cellC = {newMatDiag};
+cellC = repmat(cellC, [1 441]);
+blockC = blkdiag(cellC{:});
+blockC = [blockC zeros(size(blockC,1),1)];
