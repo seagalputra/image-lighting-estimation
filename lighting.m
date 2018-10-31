@@ -33,7 +33,6 @@ for i = 1:size(imgSplit, 1)
         % Define vector b
         b = [b reshape(imgSplit{i,j}',[],1)];
         % Construct M matrix
-        % M{end+1} = [resVectorDirection ones(81, 1)];
         M{end+1} = [resVectorDirection];
     end
 end
@@ -48,7 +47,11 @@ blockM = [blockM ones(size(blockM,1),1)];
 b = reshape(b,[],1);
 b = double(b);
 
-% computer error function
+%% Hestenes-Powell multiplier method
+
+% Initialization
+% Compute error function for initialization
+epsilon = 0.01;
 v = inv(blockM' * blockM) * blockM' * b;
 
 error = norm((blockM*v) - b,2);
@@ -58,6 +61,8 @@ matDiag1 = [-1 0; 0 -1];
 matDiag2 = [1 0; 0 1];
 newMatDiag = cat(2, matDiag1, matDiag2);
 cellC = {newMatDiag};
-cellC = repmat(cellC, [1 441]);
+cellC = repmat(cellC, [1 220]);
 blockC = blkdiag(cellC{:});
-blockC = [blockC zeros(size(blockC,1),1)];
+ 
+% blockC = [blockC zeros(size(blockC,1),1)];
+blockC = [blockC zeros(size(blockC,1),3)];
