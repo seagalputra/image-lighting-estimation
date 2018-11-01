@@ -3,22 +3,9 @@ clc;
 close all;
 
 %% Load image and convert to grayscale image
-
-% Using image demos in MATLAB folder
-img = imread('toysnoflash.png');
-
-% convert image to grayscale if image is in RGB color channel
-if (size(img, 3) == 3)
-    img = rgb2gray(img);
-end
-
-img = imcrop(img);
-
-% maintain image in 1:1 size ratio
-img = aspectRatio(img, 9);
+load('image.mat');
 
 %% Divide image into k small planes every plane contains 9x9 pixels 
-
 imgSplit = splitImage(img, 9);
 
 %% Compute surface normal
@@ -30,8 +17,10 @@ for i = 1:size(imgSplit, 1)
         tempImg = imgPadding(imgSplit{i,j});
         [resVectorDirection, magnitudeNormal, actualNormal] = estSurfNorm(tempImg);
         vecDirection{i,j} = resVectorDirection;
+        
         % Define vector b
         b = [b reshape(imgSplit{i,j}',[],1)];
+        
         % Construct M matrix
         M{end+1} = [resVectorDirection];
     end
@@ -47,15 +36,6 @@ blockM = [blockM ones(size(blockM,1),1)];
 b = reshape(b,[],1);
 b = double(b);
 
-%% Hestenes-Powell multiplier method
-
-% Initialization
-% Compute error function for initialization
-epsilon = 0.01;
-v = inv(blockM' * blockM) * blockM' * b;
-
-error = norm((blockM*v) - b,2);
-
 %% Create block matrix of C
 matDiag1 = [-1 0; 0 -1];
 matDiag2 = [1 0; 0 1];
@@ -66,3 +46,24 @@ blockC = blkdiag(cellC{:});
  
 % blockC = [blockC zeros(size(blockC,1),1)];
 blockC = [blockC zeros(size(blockC,1),3)];
+
+%% Hestenes-Powell multiplier method
+
+% Initialization
+% Compute error function for initialization
+v = inv(blockM' * blockM) * blockM' * b;
+error = norm((blockM*v) - b,2);
+epsilon = 0.01;
+lambda = 1;
+options = optimset('PlotFcns',@optimplotfval);
+x0 = v;
+j = 1;
+while (norm(blockC*v,2) >= epsilon)
+    sigma = j^2;
+    f = @(v,lambda,sigma)norm((blockM*v) - b,2) + lambda*norm(blockC*v) + sigma*norm(blockC*v,2) / 2;
+    fun = @(v)f(v,lambda,sigma);
+    result = fminsearch(fun, x0, options);
+    lambda = lambda + sigma*norm(blockC*v);
+    v = result;
+    j = j + 1;
+end
