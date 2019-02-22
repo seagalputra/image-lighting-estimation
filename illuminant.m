@@ -6,26 +6,23 @@ close all;
 img = imread('examples/1_l1c1.png');
 
 % convert image RGB to YCbCr
-img_ycbcr = rgb2ycbcr(img);
+imgYcbcr = rgb2ycbcr(img);
+Y = imgYcbcr(:,:,1);
 % edge detection using canny edge
-BW = edge(img_ycbcr(:,:,1), 'canny');
-subplot(121);
-imshow(img_ycbcr(:,:,1));
-title('Y Luminance');
-subplot(122);
-imshow(BW);
-title('Canny Filter');
+BW = edge(Y, 'canny');
 
 % Divide image into 16 blocks
-imgSplit = createImagePatch(img, 4, 4);
+imgSplit = createImagePatch(Y, 4, 4);
 bwSplit = createImagePatch(BW, 4, 4);
 
-% computing edge level percentage
+%  Region Selection
+% computing edge level percentage and avg gray value
 edgeLevel = [];
-for i = 1:size(bwSplit)
-    for j = 1:size(bwSplit)
-        edgeLevel = [edgeLevel, calcEdgeLevel(bwSplit{i,j})];
-    end
+avgGray = [];
+for i = 1:length(imgSplit)
+    edgeLevel = [edgeLevel, calcEdgeLevel(bwSplit{i})];
+    avgGray = [avgGray, mean(imgSplit{i}(:))];
 end
 % sort into ascending order
-[edgeLevelSort, index] = sort(edgeLevel);
+[edgeLevelSort, indexEdge] = sort(edgeLevel);
+[avgGraySort, indexGray] = sort(avgGray);
