@@ -3,7 +3,7 @@ clc;
 close all;
 
 % load image
-img = imread('data/1/1_l1c1.png');
+img = imread('examples/1_l1c1.png');
 
 % convert image RGB to YCbCr
 img_ycbcr = rgb2ycbcr(img);
