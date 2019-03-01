@@ -2,7 +2,7 @@ clear;
 clc;
 close all;
 
-img = imread('data/1/1_l1c1.png');
+img = imread('examples/1_l1c1.png');
 
 %% Divide image into k small planes every plane contains 9x9 pixels 
 imgSplit = splitImage(img, 9);

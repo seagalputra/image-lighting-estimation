@@ -1,8 +1,5 @@
 function [resVectorDirection, magnitudeNormal, actualNormal] = estSurfNorm(newImg)
 %ESTSURFNORM Function for estimate surface normal from Image
-%   Suppose image projected as Lambertian Surface. Assumed that z-component
-%   of vector Normal is zero. Then, we can calculate normal surface of
-%   image using neighborhood method.
 
 % Define empty array
 resVectorDirection = [];
@@ -101,4 +98,3 @@ for i = 2:size(newImg, 1) - 1
 end
 
 end
-
