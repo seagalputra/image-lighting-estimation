@@ -32,13 +32,4 @@ M = [M oneM];
 % append intensity of image in region 1 and 2
 b = [imgIntensity{1}; imgIntensity{2}];
 % solving equation
-syms v lambda
-f1 = (2*(M.'*M)*v) - (C.'*lambda) - (2*M.'*b) == 0;
-f2 = C*v == 0;
-% define error function and constraint function
-% err1 = @(v) norm((M*v)-b)^2;
-% err2 = @(v) norm(C*v)^2;
-% A = [];
-% b = [];
-% Aeq = [];
-% beq = [];
+v = pinv(M.'*M + eig(C.'*C))*M.'*b;
