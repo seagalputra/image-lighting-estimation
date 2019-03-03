@@ -12,7 +12,7 @@ img = imread('examples/1_l1c1.png');
 [imgSplit, bwSplit] = preprocessImage(img);
 
 % 2. Region Selection
-imgC = regionSelect(imgSplit, bwSplit);
+[imgC, edgeLevel, indexC] = regionSelect(imgSplit, bwSplit);
 
 % 3. Illuminant Direction Estimation
 % calculate surface normal using neighborhood method
@@ -24,12 +24,29 @@ for i = 1:length(imgC)
     temp(1,:) = []; temp(size(imgC{i},1)-1,:) = []; temp(:,1) = []; temp(:,size(imgC{i},2)-1) = [];
     imgIntensity{i} = reshape(temp.',[],1);
 end
-% Computing L(1,2)
-% create block diagram M
-M = blkdiag(vectorDirection{1}, vectorDirection{2});
-oneM = ones(length(M),1);
-M = [M oneM];
-% append intensity of image in region 1 and 2
-b = [imgIntensity{1}; imgIntensity{2}];
-% solving equation
-v = pinv(M.'*M + eig(C.'*C))*M.'*b;
+
+% define function for computing lighting direction v
+v = @(M,C,b) pinv(M.'*M + eig(C.'*C))*M.'*b;
+
+for j = 1:length(imgC)
+    if j == 3
+        % create block diagram M
+        tempM = blkdiag(vectorDirection{j}, vectorDirection{j-2});
+        oneM = ones(length(tempM),1);
+        M = [tempM oneM];
+        % append intensity of image
+        b = [imgIntensity{j}; imgIntensity{j-2}];
+        % computing L(j,j-2)
+        direction{j} = v(M,C,b);
+    else
+        % create block diagram M
+        tempM = blkdiag(vectorDirection{j}, vectorDirection{j+1});
+        oneM = ones(length(tempM),1);
+        M = [tempM oneM];
+        % append intensity of image
+        b = [imgIntensity{j}; imgIntensity{j+1}];
+        % computing L(j,j+1)
+        direction{j} = v(M,C,b);
+    end
+end
+% Computing weight of L(1,2); L(2,3) and L(3,1)

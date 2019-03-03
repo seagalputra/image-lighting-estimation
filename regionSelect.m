@@ -1,4 +1,4 @@
-function C = regionSelect(imgSplit,bwSplit)
+function [C, edgeLevel, indexC] = regionSelect(imgSplit,bwSplit)
 %REGIONSELECT Select region in specified condition
 
 % computing edge level percentage and avg gray value every local region
@@ -17,10 +17,12 @@ avgGraySort = sort(avgGray);
 B = avgGraySort(1:8);
 % select region that meet condition
 C = {};
+indexC = [];
 for i = 1:length(newImgSplit)
     avgGrayImg = mean(newImgSplit{i}(:));
     if (ismember(avgGrayImg, B) == 0 && length(C) ~= 3)
         C{end+1} = newImgSplit{i};
+        indexC = [indexC, indexEdge(i)];
     end
 end
 
