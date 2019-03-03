@@ -8,7 +8,7 @@ close all;
 
 % 1. Load and Prepare Image
 % load image
-img = imread('examples/1_l1c1.png');
+img = imread('examples/1_l4c2.png');
 [imgSplit, bwSplit] = preprocessImage(img);
 
 % 2. Region Selection
@@ -49,4 +49,20 @@ for j = 1:length(imgC)
         direction{j} = v(M,C,b);
     end
 end
-% Computing weight of L(1,2); L(2,3) and L(3,1)
+% Computing weight W(1,2), W(2,3) and W(3,1)
+W = @(x,y) 1/(x+y);
+edgeLevelC = edgeLevel(indexC);
+for i = 1:length(imgC)
+    if i == 3
+        weight(i) = W(edgeLevelC(i),edgeLevelC(i-2));
+    else
+        weight(i) = W(edgeLevelC(i),edgeLevelC(i+1));
+    end
+    finalDirection{i} = weight(i)*direction{i};
+end
+lightDirection = cell2mat(finalDirection);
+lightDirection = sum(lightDirection,2);
+Lx = mean([lightDirection(1,1) lightDirection(3,1)]);
+Ly = mean([lightDirection(2,1) lightDirection(4,1)]);
+degree = atan2(-Lx,Ly)*180/pi;
+disp(['Arah sumber cahaya pada ',num2str(degree), ' derajat']);
