@@ -1,17 +1,22 @@
+% This is a demo for estimating light direction from single image using
+% object boundary
 clear; clc; close all;
 
 img = imread('data/1.JPG');
-% crop image
-% cropped_img = imcrop(img, [448, 830, 1229, 1229]);
 % convert RGB image into Grayscale
 img_gray = rgb2gray(img);
 
-%% Segmentation for obtain ball object
+%% Obtain boundary for arbitrary object
+gaps = 10; % how many gaps between point to use
 [bw, mask] = segment_image(img);
-% find boundary image
-boundary_obj = boundarymask(bw);
+idx = boundary_img(bw, gaps);
+% plot the boundary
+imshow(bw);
+hold on;
+plot(idx(:,2), idx(:,1), 'g.');
 
 %% Fit circle from image
+% find center of object
 img_stats = regionprops('table', bw, 'Centroid', 'MajorAxisLength', 'MinorAxisLength');
 center = img_stats.Centroid;
 diameter = mean([img_stats.MajorAxisLength(1) img_stats.MinorAxisLength(1)], 2);
@@ -20,7 +25,7 @@ radius = diameter/2;
 % TODO: fit arbitrary object from single image and obtain the surface
 % normal
 % Set a points using radius and center of circle
-[x, y, nx, ny, theta] = fit_circular(center, radius);
+[x, y, nx, ny, theta] = fit_circular(center(1,:), radius);
 
 %% Split points in some plane that consist of several points
 % define how many points is include one plane
