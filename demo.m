@@ -2,25 +2,38 @@
 % object boundary
 clear; clc; close all;
 
-img = imread('data/1.JPG');
+img = imread('data/f1.JPG');
 % convert RGB image into Grayscale
 img_gray = rgb2gray(img);
 
 %% Obtain boundary for arbitrary object
 gaps = 10; % how many gaps between point to use
-[bw, mask] = segment_image(img);
-idx = boundary_img(bw, gaps);
-% plot the boundary
-imshow(bw);
-hold on;
-plot(idx(:,2), idx(:,1), 'g.');
+
+% segment image using k-means clustering
+% [bw, mask] = segment_image(img);
+% segment image using YCbCr color space
+[bw, mask] = color_threshold(img);
+bw = imfill(bw, 'holes');
+% create bounding box and area using binary mask
+props = regionprops(bw, 'BoundingBox', 'Area');
+% find region with largest area
+box_props = [];
+for i = 1:length(props)
+    if (props(i).Area > 100)
+        box_props = [box_props; props(i).BoundingBox];
+    end
+end
+% draw rectangle
+imshow(img);
+for i = 1:size(box_props,1)
+    rectangle('Position', [box_props(i,1), box_props(i,2), box_props(i,3), box_props(i,4)], ...
+        'EdgeColor', 'r', 'LineWidth', 2);
+end
 
 %% Fit circle from image
 % find center of object
 [center, radius] = circular(bw);
 
-% TODO: fit arbitrary object from single image and obtain the surface
-% normal
 % Set a points using radius and center of circle
 [x, y, nx, ny, theta] = fit_circular(center(1,:), radius);
 
