@@ -17,10 +17,7 @@ plot(idx(:,2), idx(:,1), 'g.');
 
 %% Fit circle from image
 % find center of object
-img_stats = regionprops('table', bw, 'Centroid', 'MajorAxisLength', 'MinorAxisLength');
-center = img_stats.Centroid;
-diameter = mean([img_stats.MajorAxisLength(1) img_stats.MinorAxisLength(1)], 2);
-radius = diameter/2;
+[center, radius] = circular(bw);
 
 % TODO: fit arbitrary object from single image and obtain the surface
 % normal
