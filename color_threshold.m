@@ -20,6 +20,8 @@ sliderBW = (I(:,:,1) >= channel1Min ) & (I(:,:,1) <= channel1Max) & ...
     (I(:,:,2) >= channel2Min ) & (I(:,:,2) <= channel2Max) & ...
     (I(:,:,3) >= channel3Min ) & (I(:,:,3) <= channel3Max);
 BW = sliderBW;
+% Fill holes in segmentation result
+BW = imfill(BW, 'holes');
 
 % Initialize output masked image based on input image.
 maskedRGBImage = RGB;
