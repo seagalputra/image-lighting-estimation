@@ -17,6 +17,7 @@ bw = imfill(bw, 'holes');
 % create bounding box and area using binary mask
 props = regionprops(bw, 'BoundingBox', 'Area');
 % find region with largest area
+% TODO: find center object with largest area
 box_props = [];
 for i = 1:length(props)
     if (props(i).Area > 100)
@@ -26,6 +27,8 @@ end
 % draw rectangle
 imshow(img);
 for i = 1:size(box_props,1)
+    % crop object in image
+    obj{i} = imcrop(img, box_props(i,:));
     rectangle('Position', [box_props(i,1), box_props(i,2), box_props(i,3), box_props(i,4)], ...
         'EdgeColor', 'r', 'LineWidth', 2);
 end
