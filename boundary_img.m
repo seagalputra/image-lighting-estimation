@@ -1,4 +1,4 @@
-function idx = boundary_img(BW, gaps)
+function vertices = boundary_img(BW, gaps)
 % trace a boundary
 bw_index = find(BW);
 % set first index for initial point to trace
@@ -11,5 +11,6 @@ for i = 1:size(boundary_idx,1)
         idx = [idx; boundary_idx(i,:)];
     end
 end
+vertices = [idx(:,2) idx(:,1)];
 end
 
