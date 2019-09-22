@@ -20,6 +20,8 @@ n_colors = 3;
 num_replicates = 3;
 size_threshold = 500;
 
+% TODO: add imadjust to pre-processing image
+
 disp('Perform image segmentation...');
 if (seg_choice == 1)
     % segment image using k-means clustering
