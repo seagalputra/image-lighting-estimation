@@ -22,7 +22,7 @@ function varargout = gui(varargin)
 
 % Edit the above text to modify the response to help gui
 
-% Last Modified by GUIDE v2.5 16-Sep-2019 10:38:32
+% Last Modified by GUIDE v2.5 22-Sep-2019 12:47:21
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -82,7 +82,7 @@ function grayscale_Callback(hObject, eventdata, handles)
 global img; global img_gray;
 img_gray = rgb2gray(img);
 
-axes(handles.postaxes);
+axes(handles.axes_segmentation);
 imshow(img_gray);
 
 % --- Executes on button press in open_image.
@@ -94,7 +94,7 @@ global img;
 [filename, path] = uigetfile({'*.png;*.jpg;*.tif','Image Files'});
 img = imread(fullfile(path,filename));
 
-axes(handles.preaxes);
+axes(handles.axes_original);
 imshow(img);
 
 % --- Executes on button press in segmentation.
@@ -114,7 +114,7 @@ waitbar(1,f,'Done');
 % close progress dialog
 close(f);
 
-axes(handles.postaxes);
+axes(handles.axes_segmentation);
 imshow(mask);
 
 % --- Executes on button press in normal.
@@ -128,7 +128,7 @@ global center;
 [center, radius] = circular(bw);
 [x, y, nx, ny, theta] = fit_circular(center(1,:), radius);
 
-axes(handles.postaxes);
+axes(handles.axes_normal);
 imshow(img);
 hold on;
 plot(x, y, 'r.');
@@ -157,7 +157,7 @@ L = infinite_light(N, boundary);
 set(handles.lx_coordinate, 'String', num2str(L(1)));
 set(handles.ly_coordinate, 'String', num2str(L(2)));
 % plot image
-axes(handles.postaxes);
+axes(handles.axes_light);
 imshow(img);
 hold on;
 line([center(1,1) center(1,1)+L(1)*length], [center(1,2) center(1,2)+L(2)*length], 'Color', 'red', ...
