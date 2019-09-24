@@ -2,7 +2,7 @@
 % object boundary (for circular shape object)
 clear; clc; close all;
 
-img = imread('data/1.JPG');
+img = imread('data/old/1.JPG');
 % convert RGB image into Grayscale
 img_gray = rgb2gray(img);
 

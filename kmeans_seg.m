@@ -15,7 +15,7 @@ ncols = size(ab,2);
 ab = reshape(ab,nrows*ncols,2);
 
 cluster_idx = kmeans(ab, n_colors, 'distance', 'sqEuclidean', ...
-    'Replicates', num_replicates);
+    'Replicates', num_replicates, 'Display', 'iter');
 pixel_labels = reshape(cluster_idx, nrows, ncols);
 
 % separate each label

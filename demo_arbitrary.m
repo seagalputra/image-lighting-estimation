@@ -4,7 +4,7 @@ clear; clc; close all;
 
 addpath('line_curvature');
 
-img = imread('data/f1.JPG');
+img = imread('data/old/f1.JPG');
 % convert RGB image into Grayscale
 img_gray = rgb2gray(img);
 
@@ -19,8 +19,6 @@ seg_choice = 1;
 n_colors = 3;
 num_replicates = 3;
 size_threshold = 500;
-
-% TODO: add imadjust to pre-processing image
 
 disp('Perform image segmentation...');
 if (seg_choice == 1)
