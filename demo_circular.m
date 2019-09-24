@@ -2,7 +2,7 @@
 % object boundary (for circular shape object)
 clear; clc; close all;
 
-img = imread('data/old/1.JPG');
+img = imread('data/old/f1.JPG');
 % convert RGB image into Grayscale
 img_gray = rgb2gray(img);
 
@@ -14,7 +14,7 @@ len = 3000; % length to plot line
 
 % SEGMENTATION PARAMETER
 seg_choice = 1;
-n_colors = 2;
+n_colors = 3;
 num_replicates = 3;
 size_threshold = 1000;
 
@@ -31,7 +31,8 @@ end
 
 % create bounding box and area using binary mask
 % filter with largest area
-[center, radius, box_props] = bwprops(bw, size_threshold);
+bw = bwareaopen(bw, size_threshold);
+[center, radius, box_props] = bwprops(bw);
 
 %% Calculate light source direction for every object
 disp('Estimate lighting direction...');
@@ -57,11 +58,11 @@ for i = 1:size(center,1)
     % TODO: implement local light source estimation
     
     % plot surface normal every points
-    plot(x, y, 'r.');
-    for j = 1:size(x,2)
-        line( [x(j) x(j)+nx(j)], [y(j) y(j)+ny(j)] );
-    end
-    hold on;
+    % plot(x, y, 'r.');
+    % for j = 1:size(x,2)
+    %     line( [x(j) x(j)+nx(j)], [y(j) y(j)+ny(j)] );
+    % end
+    % hold on;
     % plot light source direction from center object
     line([center(i,1) center(i,1)+L(1)*len], [center(i,2) center(i,2)+L(2)*len], 'Color', 'red', ...
         'LineWidth', 2);
