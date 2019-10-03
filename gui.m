@@ -109,6 +109,7 @@ f = waitbar(0,'Please Wait...');
 waitbar(.25,f,'Segmenting image');
 % call segmentation function
 [bw, mask] = segment_image(img);
+% bw = kmeans_seg(img,3,3);
 waitbar(.75,f,'Almost ready');
 waitbar(1,f,'Done');
 % close progress dialog
@@ -116,6 +117,7 @@ close(f);
 
 axes(handles.axes_segmentation);
 imshow(mask);
+% imshow(bw);
 
 % --- Executes on button press in normal.
 function normal_Callback(hObject, eventdata, handles)
@@ -124,17 +126,25 @@ function normal_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 global img; global bw; global x; global y; global nx; global ny;
 global center;
+
+size_threshold = 500;
+% remove unnecessary region
+bw = bwareaopen(bw, size_threshold);
+
 % suppose image is circular
 [center, radius] = circular(bw);
-[x, y, nx, ny, theta] = fit_circular(center(1,:), radius);
 
 axes(handles.axes_normal);
 imshow(img);
 hold on;
-plot(x, y, 'r.');
-% plot surface normal every points
-for i = 1:length(theta)
-    line( [x(i) x(i)+nx(i)], [y(i) y(i)+ny(i)] );
+for i = 1:size(center,1)
+    [x, y, nx, ny, theta] = fit_circular(center(i,:), radius);    
+    plot(x, y, 'r.');
+    
+    % plot surface normal every points
+    for j = 1:length(theta)
+        line( [x(j) x(j)+nx(j)], [y(j) y(j)+ny(j)] );
+    end
 end
 
 % --- Executes on button press in estimate_light.
